@@ -92,6 +92,14 @@ definePageMeta({
   layout: 'default'
 })
 
+// SEO
+useSeo({
+  title: 'Hồ sơ người dùng',
+  description: 'Quản lý hồ sơ cá nhân, xem điểm uy tín, bài đăng và hoạt động của bạn trên CarLogs.',
+  keywords: 'hồ sơ người dùng, tài khoản, hoạt động, điểm uy tín',
+  ogType: 'website'
+})
+
 const user = ref(null)
 
 onMounted(() => {

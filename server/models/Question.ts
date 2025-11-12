@@ -8,6 +8,11 @@ export const Question = defineMongooseModel({
       required: true,
       trim: true
     },
+    slug: {
+      type: String,
+      unique: true,
+      trim: true
+    },
     description: {
       type: String,
       required: true

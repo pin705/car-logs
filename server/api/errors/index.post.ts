@@ -34,9 +34,22 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Generate slug from title
+    const { generateSlug } = await import('../../utils/slug')
+    const baseSlug = generateSlug(body.title)
+    
+    // Check for existing slugs and make unique
+    let slug = baseSlug
+    let counter = 1
+    while (await ErrorPost.findOne({ slug })) {
+      slug = `${baseSlug}-${counter}`
+      counter++
+    }
+
     // Create error post
     const errorPost = await ErrorPost.create({
       title: body.title,
+      slug,
       description: body.description || body.symptoms,
       symptoms: body.symptoms,
       errorCode: body.errorCode?.toUpperCase(),

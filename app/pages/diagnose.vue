@@ -14,6 +14,14 @@
 definePageMeta({
   layout: 'default'
 })
+
+// SEO
+useSeo({
+  title: 'Chẩn đoán mã lỗi',
+  description: 'Tra cứu và chẩn đoán mã lỗi OBD-II của xe. Tìm hiểu nguyên nhân và cách khắc phục các mã lỗi động cơ, hộp số, phanh và các hệ thống khác.',
+  keywords: 'chẩn đoán mã lỗi, OBD-II, mã lỗi động cơ, tra cứu lỗi xe',
+  ogType: 'website'
+})
 </script>
 
 <style scoped>

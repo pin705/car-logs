@@ -34,9 +34,22 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Generate slug from title
+    const { generateSlug } = await import('../../utils/slug')
+    const baseSlug = generateSlug(body.title)
+    
+    // Check for existing slugs and make unique
+    let slug = baseSlug
+    let counter = 1
+    while (await Question.findOne({ slug })) {
+      slug = `${baseSlug}-${counter}`
+      counter++
+    }
+
     // Create question
     const question = await Question.create({
       title: body.title.trim(),
+      slug,
       description: body.description.trim(),
       category: body.category || 'general',
       author: user._id,

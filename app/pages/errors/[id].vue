@@ -203,6 +203,17 @@ const fetchError = async () => {
   loading.value = true
   try {
     errorData.value = await $fetch(`/api/errors/${errorId}`)
+    
+    // Set SEO after data is loaded
+    if (errorData.value) {
+      useSeo({
+        title: errorData.value.title,
+        description: errorData.value.symptoms.substring(0, 160),
+        keywords: `${errorData.value.errorCode || ''}, ${errorData.value.car?.make || ''} ${errorData.value.car?.model || ''}, lỗi xe, sửa chữa ô tô`,
+        ogType: 'article',
+        ogImage: errorData.value.images?.[0] || undefined
+      })
+    }
   } catch (err) {
     console.error('Error fetching error:', err)
   } finally {

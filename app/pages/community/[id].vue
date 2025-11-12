@@ -147,6 +147,16 @@ const fetchQuestion = async () => {
   loading.value = true
   try {
     question.value = await $fetch(`/api/questions/${questionId}`)
+    
+    // Set SEO after data is loaded
+    if (question.value) {
+      useSeo({
+        title: question.value.title,
+        description: question.value.description.substring(0, 160),
+        keywords: `${question.value.category}, hỏi đáp ô tô, tư vấn xe`,
+        ogType: 'article'
+      })
+    }
   } catch (err) {
     console.error('Error fetching question:', err)
   } finally {
