@@ -1,12 +1,11 @@
+import { Question } from '../../../models/Question'
+import { User } from '../../../models/User'
+
 export default defineEventHandler(async (event) => {
   try {
     const questionId = getRouterParam(event, 'id')
     const body = await readBody(event)
     const answerIndex = body.answerIndex
-    
-    // Get models from mongoose
-    const Question = await useMongooseModel('Question')
-    const User = await useMongooseModel('User')
 
     // Validate answer index
     if (answerIndex === undefined || answerIndex === null) {

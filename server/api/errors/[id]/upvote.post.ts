@@ -1,12 +1,11 @@
+import { ErrorPost } from '../../../models/ErrorPost'
+import { User } from '../../../models/User'
+
 export default defineEventHandler(async (event) => {
   try {
     const errorId = getRouterParam(event, 'id')
     const body = await readBody(event)
     const solutionIndex = body.solutionIndex
-    
-    // Get models from mongoose
-    const ErrorPost = await useMongooseModel('ErrorPost')
-    const User = await useMongooseModel('User')
 
     // Validate solution index
     if (solutionIndex === undefined || solutionIndex === null) {

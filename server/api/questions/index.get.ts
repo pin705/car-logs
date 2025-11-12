@@ -1,10 +1,9 @@
+import { Question } from '../../models/Question'
+
 export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event)
     const { sort = 'recent', status = '' } = query
-
-    // Get models from mongoose
-    const Question = await useMongooseModel('Question')
 
     // Build filter
     const filter: any = {}

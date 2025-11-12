@@ -1,10 +1,9 @@
+import { ErrorPost } from '../../models/ErrorPost'
+import { CarModel } from '../../models/CarModel'
+
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
-    
-    // Get models
-    const ErrorPost = await useMongooseModel('ErrorPost')
-    const CarModel = await useMongooseModel('CarModel')
     
     // For now, we'll use a mock user ID since auth is not fully implemented
     // In production, this should come from the session

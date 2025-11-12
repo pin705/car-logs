@@ -1,11 +1,10 @@
+import { ErrorPost } from '../../models/ErrorPost'
+import { CarModel } from '../../models/CarModel'
+
 export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event)
     const { sort = 'popularity', search = '', make = '', model = '' } = query
-
-    // Get models from mongoose
-    const ErrorPost = await useMongooseModel('ErrorPost')
-    const CarModel = await useMongooseModel('CarModel')
 
     // Build filter
     const filter: any = {}
