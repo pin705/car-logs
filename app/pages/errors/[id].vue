@@ -49,7 +49,7 @@
           </div>
           <div v-if="errorData.author?.badges?.length" class="author-badges">
             <span v-for="badge in errorData.author.badges" :key="badge" class="badge badge-accent">
-              {{ badge }}
+              {{ getBadgeText(badge) }}
             </span>
           </div>
         </div>
@@ -297,6 +297,17 @@ const formatCurrency = (amount) => {
     style: 'currency', 
     currency: 'VND' 
   }).format(amount)
+}
+
+const getBadgeText = (badge) => {
+  const badgeMap = {
+    beginner: 'Người mới',
+    contributor: 'Đóng góp',
+    expert: 'Chuyên gia',
+    trusted: 'Tin cậy',
+    master: 'Bậc thầy'
+  }
+  return badgeMap[badge] || badge
 }
 </script>
 
