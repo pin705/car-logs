@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Generate slug from title
-    const { generateSlug } = await import('~/server/utils/slug')
+    const { generateSlug } = await import('../../utils/slug')
     const baseSlug = generateSlug(body.title)
     
     // Check for existing slugs and make unique

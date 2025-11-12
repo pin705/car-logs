@@ -22,13 +22,16 @@ CarLogs is a trusted and transparent platform that allows users to:
 - ✅ **API Endpoints** - RESTful API for errors CRUD operations
 - ✅ **PWA Ready** - Progressive Web App configuration
 - ✅ **Mobile-First** - Responsive design with bottom navigation
+- ✅ **Vietnamese Slugs** - SEO-friendly Vietnamese URL slugs for all pages
+- ✅ **SEO Optimization** - Complete meta tags, Open Graph, and Twitter Cards
+- ✅ **Cloudinary Integration** - Cloud-based image and video uploads with auto-optimization
 
 ### Phase 2 (Upcoming)
 - ⏳ User authentication (registration/login)
 - ⏳ Solution submission and upvoting
 - ⏳ Reputation system with badges
 - ⏳ Advanced search and filtering
-- ⏳ Image/video upload support
+- ⏳ Enhanced image/video management
 
 ### Phase 3 (Planned)
 - 📋 Q&A community section
@@ -72,10 +75,18 @@ CarLogs is a trusted and transparent platform that allows users to:
    cp .env.example .env
    ```
    
-   Edit `.env` and configure MongoDB connection:
+   Edit `.env` and configure:
    ```env
+   # MongoDB Connection
    MONGODB_URI=mongodb://localhost:27017/car-logs
+   
+   # Cloudinary Configuration (required for file uploads)
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
    ```
+   
+   📖 **For Cloudinary setup instructions**, see [CLOUDINARY_SETUP.md](./CLOUDINARY_SETUP.md)
 
 4. **Run development server**
    ```bash
@@ -104,25 +115,42 @@ car-logs/
 ├── app/
 │   ├── assets/css/          # Global styles with CSS variables
 │   ├── components/          # Reusable Vue components
+│   ├── composables/         # Vue composables
+│   │   └── useSeo.ts        # SEO meta tags composable
 │   ├── layouts/             # Layout components (default with navigation)
 │   ├── pages/               # Application pages (auto-routed)
 │   │   ├── index.vue        # Homepage with error listing
 │   │   ├── submit.vue       # Error submission form
 │   │   ├── errors/[id].vue  # Error detail page
-│   │   ├── community.vue    # Community page (placeholder)
+│   │   ├── community/       # Q&A section
+│   │   │   ├── index.vue    # Questions listing
+│   │   │   └── [id].vue     # Question detail page
 │   │   ├── diagnose.vue     # Diagnostic tools (placeholder)
-│   │   └── profile.vue      # User profile (placeholder)
+│   │   ├── profile.vue      # User profile
+│   │   └── auth.vue         # Login/Register page
 │   └── app.vue              # Root component
 ├── server/
-│   ├── api/errors/          # API endpoints for errors
-│   │   ├── index.get.ts     # List errors with search/sort
-│   │   ├── index.post.ts    # Create new error
-│   │   └── [id].get.ts      # Get error details
-│   └── models/              # Mongoose schemas
-│       ├── User.ts          # User model
-│       ├── CarModel.ts      # Car model
-│       └── ErrorPost.ts     # Error post model
+│   ├── api/
+│   │   ├── errors/          # API endpoints for errors
+│   │   │   ├── index.get.ts     # List errors with search/sort
+│   │   │   ├── index.post.ts    # Create new error (with slug generation)
+│   │   │   ├── [id].get.ts      # Get error details
+│   │   │   └── [id]/...         # Error-specific endpoints
+│   │   ├── questions/       # API endpoints for Q&A
+│   │   │   ├── index.get.ts     # List questions
+│   │   │   ├── index.post.ts    # Create new question (with slug generation)
+│   │   │   └── [id]/...         # Question-specific endpoints
+│   │   ├── auth/            # Authentication endpoints
+│   │   └── upload.post.ts   # Cloudinary upload handler
+│   ├── models/              # Mongoose schemas
+│   │   ├── User.ts          # User model
+│   │   ├── CarModel.ts      # Car model
+│   │   ├── ErrorPost.ts     # Error post model (with slug field)
+│   │   └── Question.ts      # Question model (with slug field)
+│   └── utils/               # Server utilities
+│       └── slug.ts          # Vietnamese slug generator
 ├── public/                  # Static assets
+├── CLOUDINARY_SETUP.md     # Cloudinary setup guide
 ├── nuxt.config.ts          # Nuxt configuration
 └── package.json            # Dependencies and scripts
 ```
@@ -177,6 +205,7 @@ car-logs/
 ```typescript
 {
   title: String,
+  slug: String (unique, auto-generated from title),
   description: String,
   symptoms: String,
   errorCode: String,
@@ -197,6 +226,30 @@ car-logs/
   }],
   views: Number,
   popularity: Number,
+  status: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Question
+```typescript
+{
+  title: String,
+  slug: String (unique, auto-generated from title),
+  description: String,
+  category: String,
+  author: ObjectId,
+  tags: [String],
+  answers: [{
+    author: ObjectId,
+    content: String,
+    upvotes: Number,
+    upvotedBy: [ObjectId],
+    accepted: Boolean,
+    createdAt: Date
+  }],
+  views: Number,
   status: String,
   createdAt: Date,
   updatedAt: Date
