@@ -6,8 +6,23 @@ export default defineNuxtConfig({
   modules: [
     'nuxt-mongoose',
     '@vite-pwa/nuxt',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode'
   ],
+
+  colorMode: {
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light',
+  },
+
+  tailwindcss: {
+    cssPath: '~/assets/css/main.css',
+    configPath: 'tailwind.config.js',
+    exposeConfig: false,
+    viewer: true,
+  },
 
   mongoose: {
     uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/car-logs',
@@ -22,7 +37,7 @@ export default defineNuxtConfig({
       name: 'CarLogs - Car Error Community',
       short_name: 'CarLogs',
       description: 'Community-driven platform for sharing and verifying car errors, symptoms, and solutions',
-      theme_color: '#1e3a8a',
+      theme_color: '#003366',
       background_color: '#ffffff',
       icons: [
         {
