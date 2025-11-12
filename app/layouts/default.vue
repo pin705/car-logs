@@ -1,34 +1,36 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200">
+  <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-primary dark:bg-primary-800 text-white shadow-md">
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 shadow-sm">
       <div class="container">
         <div class="flex items-center justify-between py-4">
           <!-- Logo -->
-          <NuxtLink to="/" class="flex items-center gap-2 text-white no-underline hover:opacity-90 transition-opacity">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" class="text-action">
-              <path d="M16 4L4 10V22L16 28L28 22V10L16 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 16L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 16V28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 16L28 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="text-xl font-bold">CarLogs</span>
+          <NuxtLink to="/" class="flex items-center gap-3 text-gray-900 dark:text-white no-underline hover:opacity-80 transition-opacity group">
+            <div class="relative">
+              <svg width="36" height="36" viewBox="0 0 32 32" fill="none" class="text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                <path d="M16 4L4 10V22L16 28L28 22V10L16 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 16L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 16V28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 16L28 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">CarLogs</span>
           </NuxtLink>
 
           <!-- Dark Mode Toggle -->
           <button
             @click="cycleColorMode"
-            class="p-2 rounded-md hover:bg-primary-dark dark:hover:bg-primary-600 transition-colors"
+            class="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-gray-200 dark:border-gray-700"
             aria-label="Toggle dark mode"
           >
-            <svg v-if="colorMode === 'light'" class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+            <svg v-if="colorMode === 'light'" class="w-5 h-5 text-gray-700" viewBox="0 0 24 24" fill="none">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <svg v-else-if="colorMode === 'dark'" class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+            <svg v-else-if="colorMode === 'dark'" class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
               <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <svg v-else class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+            <svg v-else class="w-5 h-5 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none">
               <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
               <path d="M12 8v8m-4-4h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
