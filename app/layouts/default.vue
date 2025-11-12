@@ -18,23 +18,24 @@
           </NuxtLink>
 
           <!-- Dark Mode Toggle -->
-          <button
+          <Button
             @click="cycleColorMode"
-            class="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-gray-200 dark:border-gray-700"
+            variant="outline"
+            size="icon"
             aria-label="Toggle dark mode"
           >
-            <svg v-if="colorMode === 'light'" class="w-5 h-5 text-gray-700" viewBox="0 0 24 24" fill="none">
+            <svg v-if="colorMode === 'light'" class="w-5 h-5" viewBox="0 0 24 24" fill="none">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <svg v-else-if="colorMode === 'dark'" class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
               <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <svg v-else class="w-5 h-5 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none">
+            <svg v-else class="w-5 h-5" viewBox="0 0 24 24" fill="none">
               <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
               <path d="M12 8v8m-4-4h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
     </header>
@@ -92,6 +93,8 @@
 </template>
 
 <script setup>
+import Button from '~/components/ui/Button.vue'
+
 const colorMode = useColorMode()
 
 const cycleColorMode = () => {
