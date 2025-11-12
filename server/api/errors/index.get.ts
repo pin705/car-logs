@@ -18,6 +18,22 @@ export default defineEventHandler(async (event) => {
       ]
     }
 
+    // Filter by make and model
+    let carFilter: any = {}
+    if (make) {
+      carFilter.make = { $regex: make, $options: 'i' }
+    }
+    if (model) {
+      carFilter.model = { $regex: model, $options: 'i' }
+    }
+
+    // If car filters exist, find matching car IDs
+    if (Object.keys(carFilter).length > 0) {
+      const matchingCars = await CarModel.find(carFilter).select('_id').lean()
+      const carIds = matchingCars.map((car: any) => car._id)
+      filter.car = { $in: carIds }
+    }
+
     // Sort options
     const sortOptions: any = {}
     switch (sort) {

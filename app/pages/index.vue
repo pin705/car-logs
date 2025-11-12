@@ -19,6 +19,64 @@
       </div>
     </section>
 
+    <!-- Filters Section -->
+    <section class="filters-section">
+      <div class="container">
+        <div class="filters-card card">
+          <div class="filters-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h3 class="filters-title">Bộ lọc tìm kiếm</h3>
+            <button v-if="hasActiveFilters" class="btn-clear-filters" @click="clearFilters">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Xóa bộ lọc
+            </button>
+          </div>
+          <div class="filters-grid">
+            <div class="filter-group">
+              <label class="filter-label">Hãng xe</label>
+              <select v-model="filters.make" class="filter-select" @change="handleFilterChange">
+                <option value="">Tất cả hãng</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Honda">Honda</option>
+                <option value="Mazda">Mazda</option>
+                <option value="Ford">Ford</option>
+                <option value="Hyundai">Hyundai</option>
+                <option value="Kia">Kia</option>
+                <option value="Mercedes">Mercedes</option>
+                <option value="BMW">BMW</option>
+                <option value="Audi">Audi</option>
+                <option value="Vinfast">Vinfast</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Mẫu xe</label>
+              <input 
+                v-model="filters.model" 
+                type="text" 
+                class="filter-input" 
+                placeholder="VD: Camry, Civic..."
+                @input="handleFilterChange"
+              />
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Mã lỗi</label>
+              <input 
+                v-model="filters.errorCode" 
+                type="text" 
+                class="filter-input" 
+                placeholder="VD: P0300"
+                @input="handleFilterChange"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- My Car Section -->
     <section class="my-car-section" v-if="savedCar">
       <div class="container">
@@ -149,11 +207,23 @@ const sortBy = ref('popularity')
 const loading = ref(false)
 const errors = ref([])
 
+// Filter state
+const filters = ref({
+  make: '',
+  model: '',
+  errorCode: ''
+})
+
 // Mock saved car data (will be replaced with real data from auth)
 const savedCar = ref({
   make: 'Toyota',
   model: 'Camry',
   year: 2020
+})
+
+// Computed: Check if any filters are active
+const hasActiveFilters = computed(() => {
+  return filters.value.make || filters.value.model || filters.value.errorCode
 })
 
 // Utility: Debounce function
@@ -173,9 +243,20 @@ onMounted(async () => {
 const fetchErrors = async () => {
   loading.value = true
   try {
-    const data = await $fetch('/api/errors', {
-      query: { sort: sortBy.value, search: searchQuery.value }
-    })
+    // Build query parameters
+    const queryParams = {
+      sort: sortBy.value,
+      search: searchQuery.value,
+      make: filters.value.make,
+      model: filters.value.model
+    }
+
+    // If error code filter is set, use it in search
+    if (filters.value.errorCode) {
+      queryParams.search = filters.value.errorCode
+    }
+
+    const data = await $fetch('/api/errors', { query: queryParams })
     errors.value = data || []
   } catch (error) {
     console.error('Error fetching errors:', error)
@@ -189,13 +270,25 @@ const handleSearch = useDebounceFn(() => {
   fetchErrors()
 }, 500)
 
+const handleFilterChange = useDebounceFn(() => {
+  fetchErrors()
+}, 500)
+
 const handleSort = () => {
   fetchErrors()
 }
 
 const filterByCar = () => {
   // Apply car filter
-  searchQuery.value = `${savedCar.value.make} ${savedCar.value.model}`
+  filters.value.make = savedCar.value.make
+  filters.value.model = savedCar.value.model
+  fetchErrors()
+}
+
+const clearFilters = () => {
+  filters.value.make = ''
+  filters.value.model = ''
+  filters.value.errorCode = ''
   fetchErrors()
 }
 
@@ -244,6 +337,87 @@ const truncate = (text, length) => {
   border: none;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
+}
+
+.filters-section {
+  padding: var(--spacing-xl) 0 0 0;
+}
+
+.filters-card {
+  background-color: white;
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filters-header svg {
+  color: var(--color-primary);
+}
+
+.filters-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.btn-clear-filters {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-clear-filters:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background-color: var(--color-surface);
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.filter-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.filter-select,
+.filter-input {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  transition: border-color 0.2s ease;
+}
+
+.filter-select:focus,
+.filter-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
 }
 
 .my-car-section {
