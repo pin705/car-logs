@@ -1,10 +1,9 @@
+import { Question } from '../../models/Question'
+import { User } from '../../models/User'
+
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
-    
-    // Get models from mongoose
-    const Question = await useMongooseModel('Question')
-    const User = await useMongooseModel('User')
 
     // TODO: Get user from session (temporary mock user)
     // For now, we'll create/get a default user

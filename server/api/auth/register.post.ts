@@ -1,9 +1,8 @@
+import { User } from '../../models/User'
+
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
-    
-    // Get models from mongoose
-    const User = await useMongooseModel('User')
 
     // Validate input
     if (!body.username || !body.username.trim()) {

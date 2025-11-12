@@ -1,3 +1,5 @@
+import { ErrorPost } from '../../models/ErrorPost'
+
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
 
@@ -9,7 +11,6 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const ErrorPost = await useMongooseModel('ErrorPost')
     
     const error = await ErrorPost
       .findById(id)

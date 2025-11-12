@@ -1,9 +1,8 @@
+import { Question } from '../../models/Question'
+
 export default defineEventHandler(async (event) => {
   try {
     const questionId = getRouterParam(event, 'id')
-    
-    // Get models from mongoose
-    const Question = await useMongooseModel('Question')
 
     // Find the question
     const question = await Question
