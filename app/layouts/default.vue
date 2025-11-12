@@ -17,16 +17,20 @@
 
           <!-- Dark Mode Toggle -->
           <button
-            @click="toggleDarkMode"
+            @click="cycleColorMode"
             class="p-2 rounded-md hover:bg-primary-dark dark:hover:bg-primary-600 transition-colors"
             aria-label="Toggle dark mode"
           >
-            <svg v-if="!isDark" class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+            <svg v-if="colorMode === 'light'" class="w-6 h-6" viewBox="0 0 24 24" fill="none">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <svg v-else class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+            <svg v-else-if="colorMode === 'dark'" class="w-6 h-6" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
               <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <svg v-else class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 8v8m-4-4h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </button>
         </div>
@@ -83,11 +87,14 @@
 </template>
 
 <script setup>
-const { isDark, toggleDarkMode, initDarkMode } = useDarkMode()
+const colorMode = useColorMode()
 
-onMounted(() => {
-  initDarkMode()
-})
+const cycleColorMode = () => {
+  const modes = ['system', 'light', 'dark']
+  const currentIndex = modes.indexOf(colorMode.preference)
+  const nextIndex = (currentIndex + 1) % modes.length
+  colorMode.preference = modes[nextIndex]
+}
 </script>
 
 <style scoped>
@@ -96,11 +103,19 @@ onMounted(() => {
 }
 
 .nav-item:hover {
-  @apply text-secondary dark:text-secondary-light;
+  @apply text-secondary;
+}
+
+.dark .nav-item:hover {
+  color: #3399ff;
 }
 
 .nav-item.active {
-  @apply text-secondary dark:text-secondary-light;
+  @apply text-secondary;
+}
+
+.dark .nav-item.active {
+  color: #3399ff;
 }
 
 .nav-item svg {
@@ -116,14 +131,16 @@ onMounted(() => {
 }
 
 .fab-button {
-  @apply w-14 h-14 bg-gradient-to-br from-action to-action-dark rounded-full flex items-center justify-center shadow-lg text-white transition-transform hover:scale-105;
+  @apply w-14 h-14 rounded-full flex items-center justify-center shadow-lg text-white transition-transform hover:scale-105;
+  background: linear-gradient(to bottom right, #FF9900, #cc7a00);
 }
 
 .nav-item-fab.active .fab-button {
-  @apply from-action-dark to-action;
+  background: linear-gradient(to bottom right, #cc7a00, #FF9900);
 }
 
 .nav-item-fab .nav-label {
   @apply text-xs font-medium mt-1;
 }
 </style>
+

@@ -127,19 +127,47 @@
   }
 
   .btn-primary {
-    @apply bg-primary text-white hover:bg-primary-dark hover:-translate-y-0.5 hover:shadow-md;
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .btn-secondary {
-    @apply bg-secondary text-white hover:bg-secondary-dark hover:-translate-y-0.5 hover:shadow-md;
+    background-color: var(--color-secondary);
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--color-secondary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .btn-action {
-    @apply bg-action text-white hover:bg-action-dark hover:-translate-y-0.5 hover:shadow-md;
+    background-color: var(--color-action);
+    color: white;
+  }
+  
+  .btn-action:hover {
+    background-color: var(--color-action-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .btn-outline {
-    @apply bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white;
+    background-color: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  .btn-outline:hover {
+    background-color: var(--color-primary);
+    color: white;
   }
 
   .btn-sm {
@@ -147,7 +175,7 @@
   }
 
   .card {
-    @apply bg-white dark:bg-surface border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm transition-all duration-200;
+    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm transition-all duration-200;
   }
 
   .card-hover {
@@ -159,19 +187,23 @@
   }
 
   .badge-primary {
-    @apply bg-primary-light dark:bg-primary text-white;
+    background-color: var(--color-primary);
+    color: white;
   }
 
   .badge-secondary {
-    @apply bg-secondary dark:bg-secondary-light text-white;
+    background-color: var(--color-secondary);
+    color: white;
   }
 
   .badge-action {
-    @apply bg-action dark:bg-action-light text-white;
+    background-color: var(--color-action);
+    color: white;
   }
 
   .badge-success {
-    @apply bg-success dark:bg-success-light text-white;
+    background-color: var(--color-success);
+    color: white;
   }
 
   /* Form Styles */
@@ -193,7 +225,9 @@
   .form-input:focus,
   .form-textarea:focus,
   .form-select:focus {
-    @apply outline-none ring-2 ring-secondary border-secondary;
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
   }
 
   .form-textarea {
