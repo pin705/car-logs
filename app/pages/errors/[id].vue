@@ -207,19 +207,45 @@ const submitSolution = async () => {
   }
 
   try {
-    // This will be implemented with proper API
-    alert('Giải pháp sẽ được thêm trong giai đoạn tiếp theo')
-    showAddSolution.value = false
-    newSolution.value = { description: '', cost: null, timeRequired: '' }
+    const response = await $fetch(`/api/errors/${errorId}/solutions`, {
+      method: 'POST',
+      body: {
+        description: newSolution.value.description,
+        cost: newSolution.value.cost || 0,
+        timeRequired: newSolution.value.timeRequired || ''
+      }
+    })
+
+    if (response.success) {
+      // Refresh error data to show new solution
+      await fetchError()
+      showAddSolution.value = false
+      newSolution.value = { description: '', cost: null, timeRequired: '' }
+      alert('Giải pháp đã được thêm thành công!')
+    }
   } catch (err) {
     console.error('Error submitting solution:', err)
     alert('Có lỗi xảy ra. Vui lòng thử lại.')
   }
 }
 
-const upvoteSolution = (index) => {
-  // This will be implemented with proper API
-  alert('Tính năng upvote sẽ được thêm trong giai đoạn tiếp theo')
+const upvoteSolution = async (index) => {
+  try {
+    const response = await $fetch(`/api/errors/${errorId}/upvote`, {
+      method: 'POST',
+      body: {
+        solutionIndex: index
+      }
+    })
+
+    if (response.success) {
+      // Refresh error data to show updated upvotes
+      await fetchError()
+    }
+  } catch (err) {
+    console.error('Error upvoting solution:', err)
+    alert('Có lỗi xảy ra. Vui lòng thử lại.')
+  }
 }
 
 const getStatusText = (status) => {
