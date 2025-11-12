@@ -7,9 +7,31 @@
 @layer base {
   * {
     box-sizing: border-box;
+    @apply border-border;
   }
 
   :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 210 100% 20%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 211 100% 50%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 211 100% 50%;
+    --radius: 0.5rem;
+    
     /* Primary Colors - Deep Navy Blue */
     --color-primary: #003366;
     --color-primary-dark: #002244;
@@ -74,6 +96,26 @@
   }
 
   .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 211 100% 50%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    
     /* Dark Mode Colors */
     --color-primary: #0066cc;
     --color-primary-dark: #004d99;
@@ -123,87 +165,83 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium border-none rounded-md cursor-pointer transition-all duration-200 no-underline;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium border-none rounded-xl cursor-pointer transition-all duration-200 no-underline shadow-sm hover:shadow-md;
   }
 
   .btn-primary {
-    background-color: var(--color-primary);
-    color: white;
+    @apply bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white;
   }
   
   .btn-primary:hover {
-    background-color: var(--color-primary-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    @apply -translate-y-0.5;
   }
 
   .btn-secondary {
-    background-color: var(--color-secondary);
-    color: white;
+    @apply bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white;
   }
   
   .btn-secondary:hover {
-    background-color: var(--color-secondary-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    @apply -translate-y-0.5;
   }
 
   .btn-action {
-    background-color: var(--color-action);
-    color: white;
+    @apply bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white;
   }
   
   .btn-action:hover {
-    background-color: var(--color-action-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    @apply -translate-y-0.5;
   }
 
   .btn-outline {
-    background-color: transparent;
-    border: 2px solid var(--color-primary);
-    color: var(--color-primary);
+    @apply bg-transparent border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500;
   }
   
   .btn-outline:hover {
-    background-color: var(--color-primary);
-    color: white;
+    @apply shadow-none;
   }
 
   .btn-sm {
-    @apply px-4 py-2 text-sm;
+    @apply px-4 py-2 text-sm rounded-lg;
+  }
+
+  .btn-accent {
+    @apply bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white;
   }
 
   .card {
-    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm transition-all duration-200;
+    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm transition-all duration-200;
   }
 
   .card-hover {
-    @apply hover:shadow-md hover:-translate-y-1;
+    @apply hover:shadow-xl hover:-translate-y-1 hover:border-gray-300 dark:hover:border-gray-600;
   }
 
   .badge {
-    @apply inline-flex items-center px-2 py-1 text-xs font-semibold rounded uppercase tracking-wide;
+    @apply inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full tracking-wide;
   }
 
   .badge-primary {
-    background-color: var(--color-primary);
-    color: white;
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200;
   }
 
   .badge-secondary {
-    background-color: var(--color-secondary);
-    color: white;
+    @apply bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200;
   }
 
   .badge-action {
-    background-color: var(--color-action);
-    color: white;
+    @apply bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200;
+  }
+
+  .badge-accent {
+    @apply bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200;
   }
 
   .badge-success {
-    background-color: var(--color-success);
-    color: white;
+    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+  }
+
+  .badge-outline {
+    @apply bg-transparent border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300;
   }
 
   /* Form Styles */
@@ -212,22 +250,21 @@
   }
 
   .form-label {
-    @apply block text-sm font-medium mb-2 text-gray-900 dark:text-gray-100;
+    @apply block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300;
   }
 
   .form-input,
   .form-textarea,
   .form-select {
-    @apply w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-md transition-colors duration-200;
+    @apply w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg transition-all duration-200;
     @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100;
+    @apply focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400;
   }
 
   .form-input:focus,
   .form-textarea:focus,
   .form-select:focus {
     outline: none;
-    border-color: var(--color-secondary);
-    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
   }
 
   .form-textarea {
@@ -236,6 +273,6 @@
 
   /* Code/Technical Display */
   .code-display {
-    @apply font-mono text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded;
+    @apply font-mono text-sm bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700;
   }
 }
