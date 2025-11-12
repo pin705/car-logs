@@ -122,13 +122,13 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Hình ảnh (tùy chọn)</label>
-            <div class="file-upload-info">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <p>Tính năng tải ảnh sẽ được thêm trong giai đoạn tiếp theo</p>
-            </div>
+            <label class="form-label">Hình ảnh & Video (tùy chọn)</label>
+            <FileUpload 
+              v-model="uploadedFiles"
+              accept="image/*,video/*"
+              :multiple="true"
+              hint="PNG, JPG, GIF, WebP hoặc MP4, WebM (tối đa 10MB mỗi file)"
+            />
           </div>
         </div>
 
@@ -176,6 +176,7 @@ const router = useRouter()
 const steps = ['Thông tin xe', 'Mô tả lỗi', 'Hoàn tất']
 const currentStep = ref(0)
 const submitting = ref(false)
+const uploadedFiles = ref([])
 
 const formData = ref({
   title: '',
@@ -213,9 +214,22 @@ const handleSubmit = async () => {
   submitting.value = true
   
   try {
+    // Separate images and videos from uploaded files
+    const images = uploadedFiles.value
+      .filter(file => file.type?.startsWith('image/'))
+      .map(file => file.url)
+    
+    const videos = uploadedFiles.value
+      .filter(file => file.type?.startsWith('video/'))
+      .map(file => file.url)
+    
     const response = await $fetch('/api/errors', {
       method: 'POST',
-      body: formData.value
+      body: {
+        ...formData.value,
+        images,
+        videos
+      }
     })
     
     // Show success message

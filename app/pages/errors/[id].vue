@@ -106,6 +106,15 @@
               />
             </div>
           </div>
+          <div class="form-group">
+            <label class="form-label">Hình ảnh minh họa (tùy chọn)</label>
+            <FileUpload 
+              v-model="solutionFiles"
+              accept="image/*"
+              :multiple="true"
+              hint="PNG, JPG, GIF, WebP (tối đa 10MB mỗi file)"
+            />
+          </div>
           <div class="form-actions">
             <button class="btn btn-outline btn-sm" @click="showAddSolution = false">Hủy</button>
             <button class="btn btn-primary btn-sm" @click="submitSolution">Gửi giải pháp</button>
@@ -179,6 +188,7 @@ const errorId = route.params.id
 const loading = ref(true)
 const errorData = ref(null)
 const showAddSolution = ref(false)
+const solutionFiles = ref([])
 const newSolution = ref({
   description: '',
   cost: null,
@@ -207,12 +217,15 @@ const submitSolution = async () => {
   }
 
   try {
+    const images = solutionFiles.value.map(file => file.url)
+    
     const response = await $fetch(`/api/errors/${errorId}/solutions`, {
       method: 'POST',
       body: {
         description: newSolution.value.description,
         cost: newSolution.value.cost || 0,
-        timeRequired: newSolution.value.timeRequired || ''
+        timeRequired: newSolution.value.timeRequired || '',
+        images
       }
     })
 
@@ -221,6 +234,7 @@ const submitSolution = async () => {
       await fetchError()
       showAddSolution.value = false
       newSolution.value = { description: '', cost: null, timeRequired: '' }
+      solutionFiles.value = []
       alert('Giải pháp đã được thêm thành công!')
     }
   } catch (err) {
