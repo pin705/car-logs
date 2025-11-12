@@ -173,16 +173,13 @@ onMounted(async () => {
 const fetchErrors = async () => {
   loading.value = true
   try {
-    // This will be replaced with real API call
-    // const data = await $fetch('/api/errors', {
-    //   query: { sort: sortBy.value, search: searchQuery.value }
-    // })
-    // errors.value = data
-    
-    // Mock data for now
-    errors.value = []
+    const data = await $fetch('/api/errors', {
+      query: { sort: sortBy.value, search: searchQuery.value }
+    })
+    errors.value = data || []
   } catch (error) {
     console.error('Error fetching errors:', error)
+    errors.value = []
   } finally {
     loading.value = false
   }
