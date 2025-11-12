@@ -1,8 +1,10 @@
 <template>
-  <div class="submit-page">
+  <div class="py-8 min-h-[calc(100vh-160px)]">
     <div class="container">
-      <h1 class="page-title">Đăng lỗi mới</h1>
-      <p class="page-subtitle">Chia sẻ kinh nghiệm về lỗi xe của bạn với cộng đồng</p>
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold mb-2">Đăng lỗi mới</h1>
+        <p class="text-muted-foreground">Chia sẻ kinh nghiệm về lỗi xe của bạn với cộng đồng</p>
+      </div>
 
       <!-- Progress Steps -->
       <div class="steps-indicator">
@@ -18,155 +20,176 @@
       </div>
 
       <!-- Form -->
-      <form @submit.prevent="handleSubmit" class="error-form card">
-        <!-- Step 1: Car Information -->
-        <div v-show="currentStep === 0" class="form-step">
-          <h2 class="step-title">Thông tin xe</h2>
-          
-          <div class="form-group">
-            <label class="form-label">Hãng xe *</label>
-            <input 
-              v-model="formData.car.make" 
-              type="text" 
-              class="form-input"
-              placeholder="VD: Toyota, Honda, Ford..."
-              required
-            />
+      <form @submit.prevent="handleSubmit">
+        <Card>
+          <!-- Step 1: Car Information -->
+          <div v-show="currentStep === 0" class="space-y-6">
+            <CardHeader>
+              <CardTitle>Thông tin xe</CardTitle>
+            </CardHeader>
+            <CardContent class="space-y-6">
+              <div class="space-y-2">
+                <Label for="make">Hãng xe *</Label>
+                <Input 
+                  id="make"
+                  v-model="formData.car.make" 
+                  type="text" 
+                  placeholder="VD: Toyota, Honda, Ford..."
+                  required
+                />
+              </div>
+
+              <div class="space-y-2">
+                <Label for="model">Mẫu xe *</Label>
+                <Input 
+                  id="model"
+                  v-model="formData.car.model" 
+                  type="text" 
+                  placeholder="VD: Camry, Civic, Ranger..."
+                  required
+                />
+              </div>
+
+              <div class="space-y-2">
+                <Label for="year">Năm sản xuất *</Label>
+                <Input 
+                  id="year"
+                  v-model.number="formData.car.year" 
+                  type="number" 
+                  placeholder="VD: 2020"
+                  :min="1950"
+                  :max="new Date().getFullYear() + 1"
+                  required
+                />
+              </div>
+
+              <div class="space-y-2">
+                <Label for="variant">Phiên bản (tùy chọn)</Label>
+                <Input 
+                  id="variant"
+                  v-model="formData.car.variant" 
+                  type="text" 
+                  placeholder="VD: 2.5Q, RS, XLT..."
+                />
+              </div>
+            </CardContent>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Mẫu xe *</label>
-            <input 
-              v-model="formData.car.model" 
-              type="text" 
-              class="form-input"
-              placeholder="VD: Camry, Civic, Ranger..."
-              required
-            />
+          <!-- Step 2: Error Information -->
+          <div v-show="currentStep === 1" class="space-y-6">
+            <CardHeader>
+              <CardTitle>Mô tả lỗi</CardTitle>
+            </CardHeader>
+            <CardContent class="space-y-6">
+              <div class="space-y-2">
+                <Label for="title">Tiêu đề *</Label>
+                <Input 
+                  id="title"
+                  v-model="formData.title" 
+                  type="text" 
+                  placeholder="VD: Động cơ rung giật khi tăng tốc"
+                  required
+                />
+              </div>
+
+              <div class="space-y-2">
+                <Label for="symptoms">Triệu chứng *</Label>
+                <Textarea 
+                  id="symptoms"
+                  v-model="formData.symptoms" 
+                  placeholder="Mô tả chi tiết các triệu chứng bạn gặp phải..."
+                  required
+                />
+              </div>
+
+              <div class="space-y-2">
+                <Label for="errorCode">Mã lỗi OBD-II (tùy chọn)</Label>
+                <Input 
+                  id="errorCode"
+                  v-model="formData.errorCode" 
+                  type="text" 
+                  placeholder="VD: P0300, P0420..."
+                  pattern="[A-Z][0-9]{4}"
+                  @input="formatErrorCode"
+                />
+                <p class="text-sm text-muted-foreground">Nhập mã lỗi nếu bạn đã quét OBD-II (dạng P0000, C0000...)</p>
+              </div>
+            </CardContent>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Năm sản xuất *</label>
-            <input 
-              v-model.number="formData.car.year" 
-              type="number" 
-              class="form-input"
-              placeholder="VD: 2020"
-              :min="1950"
-              :max="new Date().getFullYear() + 1"
-              required
-            />
+          <!-- Step 3: Additional Details -->
+          <div v-show="currentStep === 2" class="space-y-6">
+            <CardHeader>
+              <CardTitle>Thông tin bổ sung</CardTitle>
+            </CardHeader>
+            <CardContent class="space-y-6">
+              <div class="space-y-2">
+                <Label for="description">Mô tả chi tiết (tùy chọn)</Label>
+                <Textarea 
+                  id="description"
+                  v-model="formData.description" 
+                  placeholder="Thêm bất kỳ thông tin nào khác có thể hữu ích..."
+                />
+              </div>
+
+              <div class="space-y-2">
+                <Label>Hình ảnh & Video (tùy chọn)</Label>
+                <FileUpload 
+                  v-model="uploadedFiles"
+                  accept="image/*,video/*"
+                  :multiple="true"
+                  hint="PNG, JPG, GIF, WebP hoặc MP4, WebM (tối đa 10MB mỗi file)"
+                />
+              </div>
+            </CardContent>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Phiên bản (tùy chọn)</label>
-            <input 
-              v-model="formData.car.variant" 
-              type="text" 
-              class="form-input"
-              placeholder="VD: 2.5Q, RS, XLT..."
-            />
-          </div>
-        </div>
-
-        <!-- Step 2: Error Information -->
-        <div v-show="currentStep === 1" class="form-step">
-          <h2 class="step-title">Mô tả lỗi</h2>
-          
-          <div class="form-group">
-            <label class="form-label">Tiêu đề *</label>
-            <input 
-              v-model="formData.title" 
-              type="text" 
-              class="form-input"
-              placeholder="VD: Động cơ rung giật khi tăng tốc"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Triệu chứng *</label>
-            <textarea 
-              v-model="formData.symptoms" 
-              class="form-textarea"
-              placeholder="Mô tả chi tiết các triệu chứng bạn gặp phải..."
-              required
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Mã lỗi OBD-II (tùy chọn)</label>
-            <input 
-              v-model="formData.errorCode" 
-              type="text" 
-              class="form-input"
-              placeholder="VD: P0300, P0420..."
-              pattern="[A-Z][0-9]{4}"
-              @input="formatErrorCode"
-            />
-            <p class="form-hint">Nhập mã lỗi nếu bạn đã quét OBD-II (dạng P0000, C0000...)</p>
-          </div>
-        </div>
-
-        <!-- Step 3: Additional Details -->
-        <div v-show="currentStep === 2" class="form-step">
-          <h2 class="step-title">Thông tin bổ sung</h2>
-          
-          <div class="form-group">
-            <label class="form-label">Mô tả chi tiết (tùy chọn)</label>
-            <textarea 
-              v-model="formData.description" 
-              class="form-textarea"
-              placeholder="Thêm bất kỳ thông tin nào khác có thể hữu ích..."
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Hình ảnh & Video (tùy chọn)</label>
-            <FileUpload 
-              v-model="uploadedFiles"
-              accept="image/*,video/*"
-              :multiple="true"
-              hint="PNG, JPG, GIF, WebP hoặc MP4, WebM (tối đa 10MB mỗi file)"
-            />
-          </div>
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="form-actions">
-          <button 
-            v-if="currentStep > 0"
-            type="button" 
-            class="btn btn-outline"
-            @click="previousStep"
-          >
-            Quay lại
-          </button>
-          
-          <button 
-            v-if="currentStep < steps.length - 1"
-            type="button" 
-            class="btn btn-primary"
-            @click="nextStep"
-          >
-            Tiếp theo
-          </button>
-          
-          <button 
-            v-else
-            type="submit" 
-            class="btn btn-accent"
-            :disabled="submitting"
-          >
-            {{ submitting ? 'Đang gửi...' : 'Đăng lỗi' }}
-          </button>
-        </div>
+          <!-- Navigation Buttons -->
+          <CardFooter class="flex gap-2">
+            <Button 
+              v-if="currentStep > 0"
+              type="button" 
+              variant="outline"
+              @click="previousStep"
+            >
+              Quay lại
+            </Button>
+            
+            <Button 
+              v-if="currentStep < steps.length - 1"
+              type="button" 
+              @click="nextStep"
+              class="ml-auto"
+            >
+              Tiếp theo
+            </Button>
+            
+            <Button 
+              v-else
+              type="submit" 
+              :disabled="submitting"
+              class="ml-auto bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
+            >
+              {{ submitting ? 'Đang gửi...' : 'Đăng lỗi' }}
+            </Button>
+          </CardFooter>
+        </Card>
       </form>
     </div>
   </div>
 </template>
 
 <script setup>
+import Card from '~/components/ui/Card.vue'
+import CardHeader from '~/components/ui/CardHeader.vue'
+import CardTitle from '~/components/ui/CardTitle.vue'
+import CardContent from '~/components/ui/CardContent.vue'
+import CardFooter from '~/components/ui/CardFooter.vue'
+import Button from '~/components/ui/Button.vue'
+import Input from '~/components/ui/Input.vue'
+import Textarea from '~/components/ui/Textarea.vue'
+import Label from '~/components/ui/Label.vue'
+
 definePageMeta({
   layout: 'default'
 })
