@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@vite-pwa/nuxt": "^1.0.7",
+    "cloudinary": "^2.8.0",
     "mongoose": "^8.19.3",
     "nuxt": "^4.2.1",
     "nuxt-auth-utils": "^0.5.25",

@@ -136,6 +136,14 @@ definePageMeta({
   layout: 'default'
 })
 
+// SEO
+useSeo({
+  title: 'Hỏi & Đáp',
+  description: 'Cộng đồng hỏi đáp về ô tô. Đặt câu hỏi và nhận câu trả lời từ các chuyên gia và người dùng có kinh nghiệm về bảo dưỡng, sửa chữa, chẩn đoán xe.',
+  keywords: 'hỏi đáp ô tô, tư vấn sửa xe, bảo dưỡng xe, cộng đồng ô tô, chẩn đoán lỗi xe',
+  ogType: 'website'
+})
+
 const showAskQuestion = ref(false)
 const activeTab = ref('all')
 const sortBy = ref('recent')

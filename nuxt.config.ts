@@ -62,11 +62,18 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'CarLogs - Car Error Community',
+      title: 'CarLogs - Cộng Đồng Lỗi Xe',
+      htmlAttrs: {
+        lang: 'vi'
+      },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Community-driven platform for sharing car errors and solutions' }
+        { name: 'description', content: 'Cộng đồng chia sẻ và tra cứu lỗi xe, mã OBD-II, triệu chứng và giải pháp sửa chữa ô tô tại Việt Nam' },
+        { name: 'format-detection', content: 'telephone=no' },
+        { name: 'theme-color', content: '#003366' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'default' }
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }

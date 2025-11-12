@@ -84,6 +84,14 @@ definePageMeta({
   layout: 'default'
 })
 
+// SEO
+useSeo({
+  title: 'Đăng nhập / Đăng ký',
+  description: 'Đăng nhập hoặc tạo tài khoản mới để tham gia cộng đồng CarLogs. Chia sẻ kinh nghiệm, đặt câu hỏi và nhận giải pháp từ cộng đồng.',
+  keywords: 'đăng nhập, đăng ký, tài khoản CarLogs',
+  ogType: 'website'
+})
+
 const isLogin = ref(true)
 const loading = ref(false)
 const errorMessage = ref('')

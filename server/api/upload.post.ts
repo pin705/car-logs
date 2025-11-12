@@ -1,9 +1,14 @@
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
-import { existsSync } from 'fs'
+import { v2 as cloudinary } from 'cloudinary'
 
 export default defineEventHandler(async (event) => {
   try {
+    // Configure Cloudinary
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET
+    })
+
     const formData = await readMultipartFormData(event)
     
     if (!formData || formData.length === 0) {
@@ -14,12 +19,6 @@ export default defineEventHandler(async (event) => {
     }
 
     const uploadedFiles = []
-    const uploadDir = join(process.cwd(), 'public', 'uploads')
-
-    // Create uploads directory if it doesn't exist
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true })
-    }
 
     for (const file of formData) {
       if (file.name === 'file' && file.filename) {
@@ -42,22 +41,31 @@ export default defineEventHandler(async (event) => {
           })
         }
 
-        // Generate unique filename
-        const timestamp = Date.now()
-        const randomString = Math.random().toString(36).substring(7)
-        const ext = file.filename.split('.').pop()
-        const filename = `${timestamp}-${randomString}.${ext}`
-        const filepath = join(uploadDir, filename)
+        // Determine resource type based on file type
+        const resourceType = file.type.startsWith('video/') ? 'video' : 'image'
 
-        // Write file to disk
-        await writeFile(filepath, file.data)
+        // Convert buffer to base64
+        const base64Data = `data:${file.type};base64,${file.data.toString('base64')}`
 
-        // Return public URL
+        // Upload to Cloudinary
+        const result = await cloudinary.uploader.upload(base64Data, {
+          folder: 'car-logs',
+          resource_type: resourceType,
+          transformation: resourceType === 'image' ? [
+            { quality: 'auto' },
+            { fetch_format: 'auto' }
+          ] : undefined
+        })
+
+        // Return Cloudinary URL
         uploadedFiles.push({
-          filename,
-          url: `/uploads/${filename}`,
+          filename: file.filename,
+          url: result.secure_url,
+          publicId: result.public_id,
           type: file.type,
-          size: file.data.length
+          size: file.data.length,
+          width: result.width,
+          height: result.height
         })
       }
     }

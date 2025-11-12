@@ -171,6 +171,14 @@ definePageMeta({
   layout: 'default'
 })
 
+// SEO
+useSeo({
+  title: 'Đăng lỗi mới',
+  description: 'Chia sẻ kinh nghiệm về lỗi xe của bạn với cộng đồng. Đăng thông tin lỗi xe, triệu chứng, mã OBD-II để nhận giải pháp từ cộng đồng.',
+  keywords: 'đăng lỗi xe, báo cáo lỗi ô tô, chia sẻ kinh nghiệm sửa xe',
+  ogType: 'website'
+})
+
 const router = useRouter()
 
 const steps = ['Thông tin xe', 'Mô tả lỗi', 'Hoàn tất']

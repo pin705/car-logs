@@ -211,6 +211,14 @@ definePageMeta({
   layout: 'default'
 })
 
+// SEO
+useSeo({
+  title: 'Trang chủ',
+  description: 'Cộng đồng chia sẻ và tra cứu lỗi xe, mã OBD-II, triệu chứng và giải pháp sửa chữa. Tìm kiếm lỗi xe của bạn và nhận tư vấn từ cộng đồng.',
+  keywords: 'lỗi xe, mã lỗi OBD-II, sửa chữa ô tô, chẩn đoán xe, triệu chứng xe hỏng, giải pháp sửa xe, cộng đồng ô tô Việt Nam',
+  ogType: 'website'
+})
+
 const searchQuery = ref('')
 const sortBy = ref('popularity')
 const loading = ref(false)
